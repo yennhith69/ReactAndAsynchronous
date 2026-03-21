@@ -1,0 +1,565 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Buoi 1 - React Nen Tang</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet" />
+    <style>
+        :root {
+            --bg-1: #f3f8f4;
+            --bg-2: #fff8ed;
+            --text: #1f2a2e;
+            --muted: #5a6a72;
+            --primary: #0d8f68;
+            --primary-2: #0a6a52;
+            --accent: #ff8a3d;
+            --panel: rgba(255, 255, 255, 0.78);
+            --border: rgba(20, 60, 80, 0.12);
+            --shadow: 0 20px 45px rgba(10, 30, 45, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Be Vietnam Pro", sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at 15% 20%, #d9f4e4 0, transparent 45%),
+                radial-gradient(circle at 85% 80%, #ffd7b2 0, transparent 40%),
+                linear-gradient(135deg, var(--bg-1), var(--bg-2));
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .deck {
+            width: min(1100px, 92vw);
+            margin: 20px auto;
+            height: calc(100vh - 40px);
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(8px);
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            overflow: hidden;
+        }
+
+        .topbar {
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .title {
+            font-weight: 800;
+            letter-spacing: 0.2px;
+            font-size: 18px;
+        }
+
+        .tag {
+            display: inline-flex;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: #e8f7f0;
+            color: var(--primary-2);
+            font-size: 12px;
+            font-weight: 700;
+            border: 1px solid #cbeedd;
+        }
+
+        .progress {
+            width: 180px;
+            height: 10px;
+            border-radius: 999px;
+            background: #dce5e8;
+            overflow: hidden;
+            border: 1px solid #c8d6dc;
+        }
+
+        .progress>div {
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transition: width 220ms ease;
+        }
+
+        .slides {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transform: translateX(40px);
+            transition: opacity 240ms ease, transform 240ms ease;
+            padding: clamp(20px, 3vw, 36px);
+            overflow-y: auto;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+            z-index: 1;
+        }
+
+        h1,
+        h2 {
+            margin: 0 0 12px;
+            line-height: 1.2;
+        }
+
+        h1 {
+            font-size: clamp(28px, 4vw, 44px);
+        }
+
+        h2 {
+            font-size: clamp(22px, 3.2vw, 32px);
+        }
+
+        p {
+            color: var(--muted);
+            line-height: 1.6;
+            margin: 8px 0 12px;
+        }
+
+        ul {
+            margin: 10px 0;
+            padding-left: 22px;
+            line-height: 1.7;
+        }
+
+        li {
+            margin: 3px 0;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 14px 16px;
+        }
+
+        .card h3 {
+            margin: 0 0 8px;
+            font-size: 18px;
+        }
+
+        code,
+        pre {
+            font-family: "JetBrains Mono", monospace;
+            font-size: 13px;
+        }
+
+        pre {
+            margin: 12px 0;
+            background: #12222f;
+            color: #e6f6ff;
+            border-radius: 14px;
+            border: 1px solid #2f4a5e;
+            padding: 12px 14px;
+            overflow: auto;
+            line-height: 1.5;
+        }
+
+        .time {
+            font-size: 13px;
+            display: inline-flex;
+            background: #fff3dc;
+            border: 1px solid #ffe0af;
+            color: #8b5b15;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-weight: 700;
+        }
+
+        .footer {
+            border-top: 1px solid var(--border);
+            padding: 14px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        button {
+            border: none;
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-weight: 700;
+            cursor: pointer;
+            background: #dce8ee;
+            color: #1f3642;
+        }
+
+        button.primary {
+            background: linear-gradient(90deg, var(--primary), var(--primary-2));
+            color: white;
+        }
+
+        button:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+
+        .checklist {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .check {
+            border: 1px dashed #b7c8cf;
+            border-radius: 12px;
+            padding: 10px 12px;
+            background: #f8fcfe;
+        }
+
+        .tip {
+            border-left: 4px solid var(--accent);
+            padding: 8px 10px;
+            background: #fff6ef;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .kbd {
+            font-family: "JetBrains Mono", monospace;
+            border: 1px solid #a8bac2;
+            padding: 2px 6px;
+            border-radius: 6px;
+            background: #eef4f7;
+            font-size: 12px;
+            color: #26424f;
+        }
+
+        @media (max-width: 900px) {
+            .deck {
+                width: 96vw;
+                height: calc(100vh - 20px);
+                margin: 10px auto;
+            }
+
+            .grid-2,
+            .checklist {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="deck">
+        <header class="topbar">
+            <div>
+                <div class="title">Slide Day Hoc - Buoi 1 React (90 phut)</div>
+                <div class="tag">JSX • Props • Event • Map List • ProductCard</div>
+            </div>
+            <div class="progress" aria-label="Tien do slide">
+                <div id="progress-bar"></div>
+            </div>
+        </header>
+
+        <section class="slides" id="slides">
+            <article class="slide active">
+                <h1>Buoi 1: Nen tang React cho Nhi</h1>
+                <p>Buoi nay khong hoc nhieu thu lung tung. Chi tap trung 1 muc tieu: tao duoc ProductCard va render dung
+                    10 item mock data bang map.</p>
+                <div class="grid-2">
+                    <div class="card">
+                        <h3>Muc tieu dat</h3>
+                        <ul>
+                            <li>Hieu component hoa UI.</li>
+                            <li>Viet duoc JSX co du lieu dong.</li>
+                            <li>Nhan du lieu qua props.</li>
+                            <li>Gan event click dung cach.</li>
+                            <li>Render list voi map + key.</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Quy tac buoi hoc</h3>
+                        <ul>
+                            <li>Hoc xong 1 y moi moi chuyen sang y tiep theo.</li>
+                            <li>Moi phan co mini demo 2 phut.</li>
+                            <li>Neu bi ket > 3 phut thi hoi ngay mentor.</li>
+                            <li>Cuoi buoi phai tu demo 3 phut.</li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="slide">
+                <h2>Timeline 90 phut</h2>
+                <ul>
+                    <li><span class="time">10 phut</span> Tu duy component hoa UI.</li>
+                    <li><span class="time">15 phut</span> JSX can ban.</li>
+                    <li><span class="time">15 phut</span> Props (cha -> con).</li>
+                    <li><span class="time">15 phut</span> Event onClick.</li>
+                    <li><span class="time">15 phut</span> Map list + key.</li>
+                    <li><span class="time">15 phut</span> Bai tap ProductCard.</li>
+                    <li><span class="time">5 phut</span> Chot checklist dat/chua dat.</li>
+                </ul>
+                <div class="tip">Moc quan trong: 70-75 phut dau chi day du kien thuc can de hoan thanh bai tap cuoi.
+                </div>
+            </article>
+
+            <article class="slide">
+                <h2>Phan 1 - Tu duy component</h2>
+                <p>Muc tieu: Nhi hieu vi sao React khong viet giao dien mot cuc lon.</p>
+                <div class="grid-2">
+                    <div class="card">
+                        <h3>HTML thuong</h3>
+                        <ul>
+                            <li>1 file dai, kho tai su dung.</li>
+                            <li>100 san pham = lap code 100 lan.</li>
+                            <li>Sua 1 cho phai sua khap noi.</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>React component</h3>
+                        <ul>
+                            <li>Tach nho: Header, ProductList, ProductCard.</li>
+                            <li>Tai su dung ProductCard nhieu noi.</li>
+                            <li>Code gon, de test, de bao tri.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="tip">Cau hoi goi mo: Neu can doi style ProductCard, sua 1 lan hay 100 lan?</div>
+            </article>
+
+            <article class="slide">
+                <h2>Phan 2 - JSX can ban</h2>
+                <p>JSX la cu phap gan giong HTML trong JavaScript. Du lieu dong dat trong dau ngoac nhon.</p>
+                <pre>function ProductCard() {
+  const name = "iPhone 15";
+  return (
+    &lt;div className="card"&gt;
+      &lt;h3&gt;{name}&lt;/h3&gt;
+      &lt;p&gt;Gia: 21.490.000d&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+                <ul>
+                    <li>Dung <span class="kbd">className</span> thay vi class.</li>
+                    <li>Tra ve 1 khoi goc duy nhat.</li>
+                    <li>Khong viet if/for truc tiep trong JSX, nen dung map hoac condition expression.</li>
+                </ul>
+            </article>
+
+            <article class="slide">
+                <h2>Phan 3 - Props</h2>
+                <p>Props la du lieu component cha truyen xuong component con.</p>
+                <pre>function ProductCard({ product }) {
+  return (
+    &lt;article className="card"&gt;
+      &lt;img src={product.image} alt={product.name} /&gt;
+      &lt;h3&gt;{product.name}&lt;/h3&gt;
+      &lt;p&gt;{product.price.toLocaleString("vi-VN")} d&lt;/p&gt;
+    &lt;/article&gt;
+  );
+}</pre>
+                <div class="tip">Nho: Props la dau vao. Component con khong sua truc tiep props.</div>
+            </article>
+
+            <article class="slide">
+                <h2>Phan 4 - Event</h2>
+                <p>Event giup UI phan ung khi nguoi dung thao tac.</p>
+                <pre>function ProductCard({ product }) {
+  const onAddToCart = () =&gt; {
+    console.log("Them vao gio:", product.name);
+  };
+
+  return (
+    &lt;button onClick={onAddToCart}&gt;Them gio&lt;/button&gt;
+  );
+}</pre>
+                <ul>
+                    <li>Truyen ham vao onClick, khong goi ham ngay khi render.</li>
+                    <li>Moi card co event rieng theo product cua card do.</li>
+                </ul>
+            </article>
+
+            <article class="slide">
+                <h2>Phan 5 - Map list + key</h2>
+                <p>Dung map de render danh sach thay vi copy-paste 10 card.</p>
+                <pre>function ProductList({ products }) {
+  return (
+    &lt;section className="grid"&gt;
+      {products.map((p) =&gt; (
+        &lt;ProductCard key={p.id} product={p} /&gt;
+      ))}
+    &lt;/section&gt;
+  );
+}</pre>
+                <div class="tip">key nen la id duy nhat va on dinh. Khong uu tien dung index.</div>
+            </article>
+
+            <article class="slide">
+                <h2>Bai tap buoc 1 - Tao mock data 10 item</h2>
+                <pre>export const mockProducts = [
+  { id: 1, name: "iPhone 15 128GB", price: 21490000, image: "https://picsum.photos/seed/p1/420/280" },
+  { id: 2, name: "Galaxy S24", price: 19990000, image: "https://picsum.photos/seed/p2/420/280" },
+  { id: 3, name: "Xiaomi 14", price: 14990000, image: "https://picsum.photos/seed/p3/420/280" },
+  { id: 4, name: "MacBook Air M3", price: 30990000, image: "https://picsum.photos/seed/p4/420/280" },
+  { id: 5, name: "Dell XPS 13", price: 28990000, image: "https://picsum.photos/seed/p5/420/280" },
+  { id: 6, name: "ASUS Vivobook", price: 17990000, image: "https://picsum.photos/seed/p6/420/280" },
+  { id: 7, name: "iPad Air", price: 15990000, image: "https://picsum.photos/seed/p7/420/280" },
+  { id: 8, name: "AirPods Pro", price: 5490000, image: "https://picsum.photos/seed/p8/420/280" },
+  { id: 9, name: "Sony WH-1000XM5", price: 8990000, image: "https://picsum.photos/seed/p9/420/280" },
+  { id: 10, name: "Apple Watch S9", price: 9990000, image: "https://picsum.photos/seed/p10/420/280" }
+];</pre>
+                <p>Yeu cau: du lieu co du 4 truong id, name, price, image.</p>
+            </article>
+
+            <article class="slide">
+                <h2>Bai tap buoc 2 - ProductCard + ProductList</h2>
+                <pre>// ProductCard.jsx
+export function ProductCard({ product }) {
+  return (
+    &lt;article className="card"&gt;
+      &lt;img src={product.image} alt={product.name} /&gt;
+      &lt;h3&gt;{product.name}&lt;/h3&gt;
+      &lt;p&gt;{product.price.toLocaleString("vi-VN")} d&lt;/p&gt;
+      &lt;button onClick={() =&gt; console.log(product.id)}&gt;Xem nhanh&lt;/button&gt;
+    &lt;/article&gt;
+  );
+}
+
+// ProductList.jsx
+export function ProductList({ products }) {
+  return products.map((item) =&gt; (
+    &lt;ProductCard key={item.id} product={item} /&gt;
+  ));
+}</pre>
+            </article>
+
+            <article class="slide">
+                <h2>Checklist dat cuoi buoi</h2>
+                <div class="checklist">
+                    <div class="check">1) Tao duoc ProductCard tach rieng file/component.</div>
+                    <div class="check">2) ProductCard nhan props va hien dung ten-gia-anh.</div>
+                    <div class="check">3) Co event onClick tren nut.</div>
+                    <div class="check">4) Render bang map, khong copy 10 card bang tay.</div>
+                    <div class="check">5) Hien dung 10 item mock data.</div>
+                    <div class="check">6) Moi item co key hop le.</div>
+                    <div class="check">7) Nhi demo duoc trong 3 phut.</div>
+                    <div class="check">8) Tra loi duoc props la gi, map de lam gi.</div>
+                </div>
+            </article>
+
+            <article class="slide">
+                <h2>Loi thuong gap + cach sua nhanh</h2>
+                <div class="grid-2">
+                    <div class="card">
+                        <h3>Khong hien list</h3>
+                        <p>Thuong do quen return trong map.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Canh bao key</h3>
+                        <p>Them key bang id thay vi index.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Event khong chay</h3>
+                        <p>Check onClick dang truyen ham dung cach chua.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Anh khong hien</h3>
+                        <p>Check src va alt, test bang mot URL chac chan ton tai.</p>
+                    </div>
+                </div>
+            </article>
+
+            <article class="slide">
+                <h2>Bai tap ve nha (20-30 phut)</h2>
+                <ul>
+                    <li>Them badge "Giam gia" neu co sale price.</li>
+                    <li>Neu anh loi thi hien anh fallback.</li>
+                    <li>Them nut "Yeu thich" va log id san pham.</li>
+                </ul>
+                <div class="tip">Neu Nhi lam xong bai tap nay thi buoi 2 vao state va form se rat nhe.</div>
+            </article>
+        </section>
+
+        <footer class="footer">
+            <div id="slide-indicator">Slide 1/12</div>
+            <div class="controls">
+                <button id="prev-btn">Prev</button>
+                <button class="primary" id="next-btn">Next</button>
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        const slides = Array.from(document.querySelectorAll('.slide'));
+        const indicator = document.getElementById('slide-indicator');
+        const progressBar = document.getElementById('progress-bar');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+
+        let index = 0;
+
+        function render() {
+            slides.forEach((s, i) => s.classList.toggle('active', i === index));
+            indicator.textContent = `Slide ${index + 1}/${slides.length}`;
+            progressBar.style.width = `${((index + 1) / slides.length) * 100}%`;
+            prevBtn.disabled = index === 0;
+            nextBtn.disabled = index === slides.length - 1;
+        }
+
+        function next() {
+            if (index < slides.length - 1) {
+                index += 1;
+                render();
+            }
+        }
+
+        function prev() {
+            if (index > 0) {
+                index -= 1;
+                render();
+            }
+        }
+
+        prevBtn.addEventListener('click', prev);
+        nextBtn.addEventListener('click', next);
+
+        window.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowRight' || event.key === 'PageDown') next();
+            if (event.key === 'ArrowLeft' || event.key === 'PageUp') prev();
+        });
+
+        render();
+    </script>
+</body>
+
+</html>
