@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Buoi 1 - ProductCard Sample</title>
+    <style>
+        :root {
+            --bg: #f7faf9;
+            --card: #ffffff;
+            --text: #1f2937;
+            --muted: #6b7280;
+            --brand: #0f9f78;
+            --border: #dbe7e3;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+            background: radial-gradient(circle at 10% 10%, #dcf7ea 0, transparent 45%),
+                radial-gradient(circle at 90% 90%, #ffe5ce 0, transparent 38%),
+                var(--bg);
+            color: var(--text);
+        }
+
+        .page {
+            width: min(1100px, 92vw);
+            margin: 24px auto 40px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+
+        .title {
+            margin: 0;
+            font-size: clamp(24px, 4vw, 34px);
+            line-height: 1.2;
+        }
+
+        .sub {
+            margin: 4px 0 0;
+            color: var(--muted);
+        }
+
+        .counter {
+            background: #e8f8f2;
+            color: #0a7558;
+            border: 1px solid #c7eedf;
+            border-radius: 999px;
+            padding: 8px 12px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(22, 40, 40, 0.06);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .img-wrap {
+            aspect-ratio: 4 / 3;
+            overflow: hidden;
+            background: #eef6f3;
+        }
+
+        .img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .content {
+            padding: 10px;
+            display: grid;
+            gap: 8px;
+        }
+
+        .name {
+            margin: 0;
+            font-size: 14px;
+            line-height: 1.4;
+            min-height: 40px;
+        }
+
+        .price {
+            margin: 0;
+            font-size: 16px;
+            color: #0f7a5f;
+            font-weight: 800;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 10px;
+            padding: 8px 10px;
+            cursor: pointer;
+            background: linear-gradient(90deg, #0f9f78, #0d7c5e);
+            color: #fff;
+            font-weight: 700;
+        }
+
+        .notes {
+            margin-top: 18px;
+            border: 1px dashed #b7c8c2;
+            border-radius: 12px;
+            padding: 10px 12px;
+            background: rgba(255, 255, 255, 0.65);
+            color: #44525b;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 1100px) {
+            .grid {
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 860px) {
+            .grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 500px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <!-- React + ReactDOM (development build for learning) -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <!-- Babel de chay truc tiep file JSX trong browser -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Load file JSX -->
+    <script type="text/babel" src="./App.jsx"></script>
+</body>
+
+</html>
