@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Buoi 1 - React Co Ban ProductCard</title>
+    <style>
+        :root {
+            --page-bg: #f3f6fb;
+            --ink: #142033;
+            --muted: #5d6a79;
+            --brand: #0f9d7a;
+            --brand-dark: #0d745d;
+            --accent: #ff7a18;
+            --paper: #ffffff;
+            --line: #d8e1ec;
+            --panel-shadow: 0 18px 40px rgba(16, 35, 52, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", "Be Vietnam Pro", "Trebuchet MS", sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at 12% 10%, #dff4ea 0, transparent 35%),
+                radial-gradient(circle at 88% 16%, #ffe7cf 0, transparent 38%),
+                linear-gradient(180deg, #f8fbff 0%, var(--page-bg) 100%);
+            min-height: 100vh;
+            padding-bottom: 24px;
+        }
+
+        .page {
+            width: min(1220px, 94vw);
+            margin: 22px auto;
+        }
+
+        .hero {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(120deg, #fefefe 0%, #f6fbff 55%, #eef8f4 100%);
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            padding: 22px 24px;
+            box-shadow: var(--panel-shadow);
+        }
+
+        .hero::after {
+            content: "";
+            position: absolute;
+            right: -70px;
+            top: -90px;
+            width: 260px;
+            height: 260px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(15, 157, 122, 0.18), transparent 60%);
+            pointer-events: none;
+        }
+
+        .title {
+            margin: 0;
+            font-size: clamp(30px, 4.2vw, 46px);
+            line-height: 1.1;
+            letter-spacing: 0.2px;
+        }
+
+        .sub {
+            margin: 10px 0 0;
+            color: var(--muted);
+            max-width: 820px;
+            line-height: 1.58;
+            font-size: 15px;
+        }
+
+        .chip-row {
+            margin-top: 16px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .chip {
+            border: 1px solid #c9d8ea;
+            background: linear-gradient(180deg, #ffffff, #f3f8ff);
+            border-radius: 999px;
+            padding: 7px 12px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #31506f;
+        }
+
+        .layout {
+            margin-top: 18px;
+            display: grid;
+            grid-template-columns: 320px minmax(0, 1fr);
+            gap: 16px;
+            align-items: start;
+        }
+
+        .panel {
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            box-shadow: 0 10px 26px rgba(16, 35, 52, 0.08);
+            padding: 16px;
+        }
+
+        .panel h2,
+        .panel h3 {
+            margin: 0 0 10px;
+            letter-spacing: 0.2px;
+        }
+
+        .muted {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.55;
+        }
+
+        .controls {
+            display: grid;
+            gap: 10px;
+        }
+
+        .field {
+            display: grid;
+            gap: 6px;
+        }
+
+        .field label {
+            font-size: 12px;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+            font-weight: 800;
+            color: #3a4c61;
+        }
+
+        input,
+        select,
+        button {
+            font: inherit;
+        }
+
+        input,
+        select {
+            border: 1px solid #cad7e5;
+            border-radius: 12px;
+            padding: 10px 12px;
+            background: #fff;
+            color: #203248;
+        }
+
+        input:focus,
+        select:focus {
+            outline: 2px solid rgba(15, 157, 122, 0.26);
+            outline-offset: 1px;
+            border-color: #9bcfbe;
+        }
+
+        .control-row {
+            display: grid;
+            gap: 8px;
+        }
+
+        button {
+            border: 0;
+            border-radius: 12px;
+            padding: 11px 12px;
+            cursor: pointer;
+            font-weight: 700;
+            background: #e7edf5;
+            color: #21354b;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            line-height: 1.2;
+            text-align: center;
+            white-space: normal;
+            transition: transform 150ms ease, filter 150ms ease;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+            filter: brightness(0.98);
+        }
+
+        button.primary {
+            color: #fff;
+            background: linear-gradient(90deg, var(--brand), var(--brand-dark));
+        }
+
+        .status {
+            margin-top: 12px;
+            border: 1px solid #d3deea;
+            border-radius: 14px;
+            padding: 11px;
+            background: linear-gradient(180deg, #f7fbff, #f0f7ff);
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .checklist {
+            margin-top: 12px;
+            display: grid;
+            gap: 8px;
+        }
+
+        .check {
+            border: 1px solid #d8e3ee;
+            border-radius: 10px;
+            padding: 8px 10px;
+            background: #fdfefe;
+            font-size: 13px;
+        }
+
+        .check.ok {
+            border-color: #addcc9;
+            background: #edfaf4;
+            color: #1b5f49;
+        }
+
+        .grid {
+            margin-top: 6px;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .card {
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            overflow: hidden;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 8px 16px rgba(14, 34, 50, 0.08);
+            transition: transform 220ms ease, box-shadow 220ms ease;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 18px 30px rgba(14, 34, 50, 0.15);
+        }
+
+        .card.favorite {
+            border-color: #f0bf8f;
+        }
+
+        .img-wrap {
+            aspect-ratio: 4 / 3;
+            position: relative;
+            overflow: hidden;
+            background: #eaf0f8;
+        }
+
+        .img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 420ms ease;
+        }
+
+        .card:hover .img-wrap img {
+            transform: scale(1.08);
+        }
+
+        .img-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(9, 28, 42, 0.06), rgba(9, 28, 42, 0.46));
+            pointer-events: none;
+        }
+
+        .card-head {
+            position: absolute;
+            inset: auto 10px 10px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            z-index: 1;
+        }
+
+        .badge,
+        .favorite-pill {
+            display: inline-flex;
+            align-items: center;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 9px;
+            border: 1px solid transparent;
+            backdrop-filter: blur(2px);
+        }
+
+        .badge {
+            background: rgba(255, 229, 205, 0.93);
+            color: #8f4807;
+            border-color: rgba(255, 193, 145, 0.95);
+        }
+
+        .badge.ghost {
+            background: rgba(227, 237, 248, 0.95);
+            color: #36546f;
+            border-color: rgba(196, 212, 228, 0.95);
+        }
+
+        .favorite-pill {
+            background: rgba(237, 246, 255, 0.93);
+            color: #315471;
+            border-color: rgba(192, 211, 229, 0.95);
+        }
+
+        .favorite-pill.on {
+            background: rgba(255, 241, 227, 0.95);
+            color: #8d4f16;
+            border-color: rgba(252, 206, 162, 0.95);
+        }
+
+        .content {
+            padding: 12px;
+            display: grid;
+            gap: 8px;
+        }
+
+        .name {
+            margin: 0;
+            font-size: 15px;
+            line-height: 1.45;
+            min-height: 42px;
+        }
+
+        .price {
+            margin: 0;
+            font-size: 19px;
+            font-weight: 800;
+            color: #0d8d6d;
+        }
+
+        .meta {
+            margin: 0;
+            font-size: 12px;
+            color: #617283;
+        }
+
+        .action-row {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 8px;
+            margin-top: 2px;
+            align-items: stretch;
+        }
+
+        .action-row button {
+            width: 100%;
+            min-height: 58px;
+            padding: 10px 8px;
+        }
+
+        .cart-layout {
+            margin-top: 18px;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 300px;
+            gap: 16px;
+            align-items: start;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cart-items-list {
+            margin-top: 12px;
+            display: grid;
+            gap: 10px;
+        }
+
+        .cart-item {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto auto;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid #d8e3ee;
+            border-radius: 14px;
+            padding: 12px;
+            background: linear-gradient(180deg, #ffffff, #fbfdff);
+        }
+
+        .cart-item-title {
+            margin: 0;
+            font-size: 15px;
+            line-height: 1.45;
+        }
+
+        .cart-line-total {
+            margin: 2px 0 0;
+            font-size: 13px;
+            font-weight: 700;
+            color: #1f4968;
+        }
+
+        .cart-qty-box {
+            display: inline-grid;
+            grid-template-columns: 34px 38px 34px;
+            align-items: center;
+            justify-items: center;
+            border: 1px solid #d2ddeb;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #f5f9ff;
+        }
+
+        .cart-qty-box button {
+            border-radius: 0;
+            padding: 8px 0;
+            background: #e9f1fb;
+            font-weight: 800;
+            min-height: 34px;
+            height: 34px;
+        }
+
+        .cart-qty {
+            font-weight: 700;
+            color: #1f3d58;
+        }
+
+        .cart-remove-btn {
+            background: #fff1f1;
+            color: #8d2c2c;
+            border: 1px solid #ffd3d3;
+        }
+
+        .cart-summary-panel {
+            position: sticky;
+            top: 16px;
+        }
+
+        .cart-summary-grid {
+            margin-top: 8px;
+            display: grid;
+            gap: 8px;
+        }
+
+        .cart-summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #dce7f3;
+            border-radius: 12px;
+            padding: 10px;
+            background: #f8fbff;
+        }
+
+        @media (max-width: 1024px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .cart-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .cart-summary-panel {
+                position: static;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cart-item {
+                grid-template-columns: 1fr;
+                align-items: stretch;
+            }
+
+            .hero {
+                padding: 18px;
+            }
+
+            .title {
+                font-size: clamp(24px, 9vw, 34px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script>
+        window.APP_CONFIG = {
+            API_BASE_URL: "http://localhost:5000"
+        };
+    </script>
+
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel" src="./App.jsx"></script>
+</body>
+
+</html>
